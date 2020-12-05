@@ -29,191 +29,135 @@ class _MainAppState extends State<MainApp> {
   );
 
   Famiglie famiglia = Famiglie(
-      "Bognoni Laura", 3, "3458494881", "via delle querce 4", "Cesano boscone");
+      "Bognoni Laura", 3, "3458494881", "Via delle querce 4", "Cesano boscone");
 
   List<Product> products = Product.createList(listaSpesa);
+
+  bool consegnato = false;
+  bool pacco = false;
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: Container(
-              color: Colors.red,
-              child: SafeArea(
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    famiglia.represante,
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white),
-                                  ),
-                                ]),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  FaIcon(FontAwesomeIcons.phone,
-                                      size: 18, color: Colors.white),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    famiglia.telefono,
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white),
-                                  ),
-                                ]),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                FaIcon(FontAwesomeIcons.mapMarkerAlt,
-                                    size: 20, color: Colors.white),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  famiglia.indirizzo,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  FaIcon(FontAwesomeIcons.city,
-                                      size: 20, color: Colors.white),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    famiglia.citta,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white),
-                                  ),
-                                ]),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                FaIcon(FontAwesomeIcons.intercom,
-                                    size: 20, color: Colors.white),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  famiglia.citofono,
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Flexible(
-            flex: 7,
-            child: Column(
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            child: SafeArea(
+                child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                Expanded(
-                  flex: 14,
-                  child: PackageView(products, (int index) {
-                    setState(() {
-                      products[index].toggle();
-                    });
-                  }),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 100),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: Colors.redAccent[400].withOpacity(1),
-                          ),
-                          child: FlatButton(
-                            onPressed: () { },
-                            child: Center(
-                              child: Text(
-                                "Fatto",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                Text(
+                  "${famiglia.represante}",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: "montserrat",
+                    fontWeight: FontWeight.w600,
+                    color:  Colors.blueGrey[600]
                   ),
-                )
-
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                FaIcon(FontAwesomeIcons.male, size: 25, color:  Colors.blueGrey[300]),
+                SizedBox(
+                  width: 10,
+                ),
+                FaIcon(FontAwesomeIcons.male, size: 25, color:  Colors.blueGrey[300]),
+                SizedBox(
+                  width: 10,
+                ),
+                FaIcon(FontAwesomeIcons.male, size: 20, color:  Colors.blueGrey[300]),
+                SizedBox(
+                  width: 10,
+                ),
+                FaIcon(FontAwesomeIcons.baby, size: 20, color:  Colors.blueGrey[300]),
               ],
-            ),
-          )
+            )),
+          ),
+          Flexible(flex: 7, child: getBody(true))
         ],
       ),
     );
+  }
+
+  getBody(bool done) {
+    if (pacco) {
+      return Column(
+        children: <Widget>[
+          SizedBox(
+            height: 40,
+          ),
+          InfoRow(famiglia.indirizzo, FontAwesomeIcons.mapMarkerAlt,
+              onPress: () {
+
+            MapsLauncher.launchQuery(
+                '${famiglia.indirizzo}, ${famiglia.citta}');
+          }),
+          InfoRow(famiglia.citofono, FontAwesomeIcons.intercom),
+          InfoRow(
+            famiglia.telefono,
+            FontAwesomeIcons.phone,
+            onPress: () {
+              launch('tel:// ${famiglia.telefono}');
+            },
+          ),
+          Expanded(
+              child: getBtn()
+          )
+        ],
+      );
+    }
+
+    return Column(
+      children: <Widget>[
+        Expanded(
+          flex: 14,
+          child: PackageView(products, (int index) {
+            setState(() {
+              products[index].toggle();
+            });
+          }),
+        ),
+        Expanded(
+          flex: 2,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 100),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.redAccent[400].withOpacity(1),
+                  ),
+                  child: FlatButton(
+                    onPressed: () {},
+                    child: Center(
+                      child: Text(
+                        "Fatto",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+ Consegnato getBtn() {
+   return consegnato
+        ? Consegnato(FontAwesomeIcons.check, Colors.white, Colors.white, Colors.green,)
+        : Consegnato(FontAwesomeIcons.peopleCarry, Colors.blueGrey[100], Colors.white,  Colors.blueGrey[200], onPress: () => setState(() => consegnato = true));
   }
 }
 
@@ -275,7 +219,134 @@ class rowElement extends StatelessWidget {
   }
 }
 
+class InfoRow extends StatelessWidget {
+  final String value;
+  final IconData icon;
+  void Function() onPress;
+
+  InfoRow(this.value, this.icon, {this.onPress}) {
+    if (onPress == null) {
+      onPress = () {};
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: () => onPress(),
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: 10,
+              ),
+              FaIcon(this.icon, size: 20, color: Colors.blueGrey[600]),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                this.value,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: "montserrat",
+                    fontWeight: FontWeight.w400,
+                    color: Colors.blueGrey[400]),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+class Consegnato extends StatelessWidget {
+  final double extCircleSzie = 160.0;
+  final double intCircleSize = 136;
+
+  void Function() onPress;
+  final IconData icon;
+  final Color first;
+  final Color second;
+  final Color third;
+
+  Consegnato(this.icon, this.first, this.second, this.third, {this.onPress}){
+    if(this.onPress == null){
+      onPress = (){};
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+
+    return  Center(
+      child: Container(
+        height: extCircleSzie,
+        width: extCircleSzie,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(extCircleSzie/2),
+            border: Border.all(width: 5, color: first)
+        ),
+        child: Center(
+          child: Container(
+            height: intCircleSize,
+            width: intCircleSize,
+            decoration: BoxDecoration(
+                color: second,
+                borderRadius: BorderRadius.circular(intCircleSize/2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey[400].withOpacity(0.3),
+                    blurRadius: 5.0,
+                    spreadRadius: 3,
+                    offset: Offset(0, 0),
+                  ),
+                ]),
+            child: FlatButton(
+              shape: CircleBorder(),
+              onPressed: () => onPress(),
+              child: Center(
+                child:  FaIcon(icon, size: 50, color: third),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
 /**
+
+
+
+
+
+    Text(
+    "Consegnato",
+    style: TextStyle(
+    fontSize: 18,
+    fontFamily: "montserrat",
+    fontWeight: FontWeight.w600,
+    color: third,
+    //color: Colors.white
+    ),
+    )
+
+
+
+
+
+
+
+
     Expanded(
     flex: 2,
     child: Container(
@@ -300,7 +371,6 @@ class rowElement extends StatelessWidget {
     ),
     ),
     ),
-
 
 
 
@@ -364,15 +434,40 @@ class rowElement extends StatelessWidget {
 
 
 
+    Container(
+
+    child: Column(
+    children: <Widget>[
+    Container(
+    padding: EdgeInsets.all(5),
+    decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(10.0),
+
+    ),
+    child: FlatButton(
+    onPressed: () { },
+    child: Center(
+    child: Text(
+    "Fatto",
+    style: TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+    fontSize: 20),
+    ),
+    ),
+    ), /**/
+    ),
+    ],
+    ),
+    ),
+
+
+
+
+    Consegnato
 
 
 
 
 
-
-
-
-
-
-
-**/
+ **/

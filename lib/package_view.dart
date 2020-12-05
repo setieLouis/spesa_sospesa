@@ -46,32 +46,3 @@ class PackageView extends StatelessWidget {
 
 
 }
-
-
-
-
-/**
-    Container(
-    margin: EdgeInsets.all(5),
-    padding: EdgeInsets.all(10),
-    decoration: BoxDecoration(
-    color: Colors.green[500],
-    borderRadius: BorderRadius.circular(10)),
-    child: Text(
-    "Faggiolo x 5",
-    style: TextStyle(fontSize: 20, color: Colors.white),
-    ),
-    ),
-    Container(
-    margin: EdgeInsets.all(5),
-    padding: EdgeInsets.all(10),
-    decoration: BoxDecoration(
-    color: Colors.blueGrey[500],
-    borderRadius: BorderRadius.circular(10)),
-    child: Text(
-    "Faggiolo x 5",
-    style: TextStyle(fontSize: 20, color: Colors.white),
-    ),
-    ),
-
-**/
