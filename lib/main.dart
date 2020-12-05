@@ -35,7 +35,7 @@ class _MainAppState extends State<MainApp> {
 
   bool consegnato = false;
   bool pacco = false;
-
+  bool alldded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -114,10 +114,11 @@ class _MainAppState extends State<MainApp> {
     return Column(
       children: <Widget>[
         Expanded(
-          flex: 14,
+          flex: 16,
           child: PackageView(products, (int index) {
             setState(() {
               products[index].toggle();
+              checkAllDone();
             });
           }),
         ),
@@ -131,10 +132,16 @@ class _MainAppState extends State<MainApp> {
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.redAccent[400].withOpacity(1),
+                    color: alldded ? Colors.blueGrey[400] : Colors.blueGrey[200],
                   ),
                   child: FlatButton(
-                    onPressed: () {},
+                    onPressed: () {
+                        if(alldded){
+                          setState(() {
+                            pacco = true;
+                          });
+                        }
+                    },
                     child: Center(
                       child: Text(
                         "Fatto",
@@ -152,6 +159,20 @@ class _MainAppState extends State<MainApp> {
         )
       ],
     );
+  }
+
+  bool checkAllDone(){
+
+    bool allAdded = true;
+    for(Product pro in products){
+      if(!pro.added){
+        allAdded = false;
+        break;
+      }
+    }
+    setState(() {
+      this.alldded = allAdded;
+    });
   }
 
  Consegnato getBtn() {
@@ -178,36 +199,26 @@ class Famiglie {
 }
 
 const List<String> listaSpesa = [
-  "patate x 2",
-  "passate pomodoro x 4",
-  "scatole di latte x 3",
-  "Cereali x 5",
-  "pacco natale 1",
-  "Riso x 4",
-  "Riso x 4",
-  "Pasta kili x 8",
-  "Pasta kg x 8",
-  "Pasta kg x 8",
-  "patate x 2",
-  "passate pomodoro x 4",
-  "scatole di latte x 3",
-  "Cereali x 5",
-  "pacco natale 1",
-  "Riso x 4",
-  "Riso x 4",
-  "Pasta kili x 8",
-  "Pasta kg x 8",
-  "Pasta kg x 8",
-  "lentiche x 2",
-  "Faggiolo x 5",
-  "cecci x 5",
-  "cipolla x 3",
-  "passate pomodoro x 4",
-  "scatole di latte x 3",
-  "Cereali x 5",
-  "pacco natale 1",
-  "Riso x 4",
-  "Riso x 4",
+  "patate pz 2",
+  "passate_pomodoro pz 4",
+  "scatole_di_latte pz 3",
+  "Cereali pz 5",
+  "pacco natale pz 1",
+  "Riso pz 4",
+  "Riso pz 4",
+  "Pasta kg 8",
+  "Pasta kg 8",
+  "Pasta kg 8",
+  "patate pz 2",
+  "passate pomodoro pz 4",
+  "scatole di latte pz 3",
+  "Cereali pz 5",
+  "pacco natale pz 1",
+  "Riso pz 4",
+  "Riso pz 4",
+  "Pasta kg 8",
+  "Pasta kg 8",
+
 ];
 
 class rowElement extends StatelessWidget {

@@ -13,13 +13,16 @@ class PackageView extends StatelessWidget {
           FlatButton(
             onPressed: () => addToggle(i),
             child: Container(
+              width: 150,
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                   color: getColor(p.added),
                   borderRadius: BorderRadius.circular(10)),
-              child: Text(
-                p.element,
-                style: TextStyle(fontSize: 12, color: Colors.white),
+              child: Center(
+                child: Text(
+                  p.toString(),
+                  style: TextStyle(fontSize: 12, color: Colors.white),
+                ),
               ),
             ),
           ),
