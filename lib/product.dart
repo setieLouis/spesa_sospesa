@@ -2,9 +2,6 @@ class Product {
   String _element;
   bool _added;
 
-
-
-
   static List<Product> createList(List<String> elements ){
       return elements.map((e) => create(e)).toList();
   }
@@ -23,26 +20,46 @@ class Product {
 
   String toString(){
 
+    final string = "pz";
+    final string1 = "kg";
+
     String firstPart = "";
     String secondPart = "";
 
-    if(_element.contains("pz")){
-       firstPart = _element.substring(0, _element.indexOf("pz") - 1);
-       secondPart = _element.substring(_element.indexOf("pz") - 1);
+    if(_element.contains(string)){
+      List<String> response = split(_element, string);
+      firstPart = response[0];
+      secondPart = response[1];
 
-    }else if(_element.contains("kg")){
-      firstPart = _element.substring(0, _element.indexOf("kg") - 1);
-      secondPart = _element.substring(_element.indexOf("kg") - 1);
+    }else if(_element.contains(string1)){
+      List<String> response = split(_element, string1);
+      firstPart = response[0];
+      secondPart = response[1];
+
+    }else{
+      firstPart = _element;
     }
+
 
     if(firstPart.length > 12) {
       firstPart = firstPart.substring(0, 12);
     }
 
-    
-
     return firstPart + secondPart;
   }
+
+
+  List<String> split(String element , String splitter){
+    List<String> el = [];
+    int index = element.indexOf(splitter);
+    el.add(element.substring(0, index - 1));
+    el.add(element.substring(index - 1));
+
+     return el;
+  }
+
+
+
 
   bool get added{
     return _added;
@@ -61,7 +78,6 @@ class Product {
     return space;
   }
 }
-
 
 enum Measure{
   Kg,
