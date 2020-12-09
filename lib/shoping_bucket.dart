@@ -1,49 +1,54 @@
 import 'package:flutter/cupertino.dart';
 import 'package:spesa_sospesa/product.dart';
 
+
+const String PACKAGING = "packaging";
+const String PACKAGED = "packaged";
+const String DELIVERING = "delivering";
+const String  DELIVERED = "delivered";
 class ShoppingBucket {
 
   final String owner;
-  DeliverState _state;
+  String _state;
   final List<Product> bucket;
 
-  ShoppingBucket({@required this.owner, @required DeliverState state , @required this.bucket}){
+  ShoppingBucket({@required this.owner, @required String state , @required this.bucket}){
     this._state = state;
   }
 
   void nextState(){
 
-    if(_state == DeliverState.packaging){
+    if(_state == PACKAGING){
 
-      _state = DeliverState.packaged;
-    }else  if(_state == DeliverState.packaged){
+      _state = PACKAGED;
+    }else  if(_state == PACKAGED){
 
-      _state = DeliverState.delivering;
-    }else  if(_state == DeliverState.delivering){
+      _state = DELIVERING;
+    }else  if(_state == DELIVERING){
 
-      _state = DeliverState.delivered;
+      _state = DELIVERED;
     }else{
-      _state = DeliverState.packaging;
+      _state = PACKAGING;
     }
   }
 
   void previousState() {
 
-    if(_state == DeliverState.delivered){
+    if(_state == DELIVERED){
 
-      _state = DeliverState.delivering;
-    }else if(_state == DeliverState.delivering){
+      _state = DELIVERING;
+    }else if(_state == DELIVERING){
 
-      _state = DeliverState.packaged;
-    }else  if(_state == DeliverState.packaged){
+      _state = PACKAGED;
+    }else  if(_state == PACKAGED){
 
-      _state = DeliverState.packaging;
+      _state = PACKAGING;
     }
 
   }
 
 
-  DeliverState get state{
+  String get state{
     return _state;
   }
 

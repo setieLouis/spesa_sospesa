@@ -1,9 +1,21 @@
+
+class ProductMap {
+  String key;
+  Product value;
+
+  ProductMap(this.key, this.value);
+}
+
 class Product {
   String _element;
   bool _added;
 
   static List<Product> createList(List<String> elements ){
       return elements.map((e) => create(e)).toList();
+  }
+
+  static List<Product> createListByDynamic(List<dynamic> elements ){
+      return elements.map((e) => create(e as String)).toList();
   }
 
   static Product create(String element ){

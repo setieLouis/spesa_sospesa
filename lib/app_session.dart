@@ -3,89 +3,49 @@ import 'package:spesa_sospesa/family.dart';
 import 'package:spesa_sospesa/product.dart';
 import 'package:spesa_sospesa/shoping_bucket.dart';
 
+import 'http_caller.dart';
+
 class AppSession extends ChangeNotifier{
 
-  final List<Family> family  = [
-    Family(
-        name: "Bogoni Laura",
-        adults: 1,
-        boys: 0,
-        baby: 0,
-        phone: "3478955772",
-        address: "Via Libertà,30",
-        city: "Cesano Boscone"
-    ),
+  static final AppSession _appSession = AppSession._internal();
 
-    Family(
-        name: "Maringelli Massimiliano",
-        adults: 2,
-        boys: 2,
-        baby: 0,
-        phone: "3911340962",
-        address: "Via delle acacie,12",
-        city: "Cesano Boscone"
-    ),
+  /// Instance attributes
+  final HttpCaller _httpCaller = HttpCaller();
+  List<ShoppingBucket> _bucketList = [];
+  List<FamilyMap> families = [];
+  ShoppingBucket currentBucket;
 
-    Family(
-        name: "Vasta Maria",
-        adults: 3,
-        boys: 0,
-        baby: 0,
-        phone: "3478955772",
-        address: "Via Cellini 26",
-        city: "Cesano Boscone"
-    ),
+  /// Factory constructor
+  AppSession._internal();
 
-    Family(
-        name: "Putignano Davide",
-        adults: 2,
-        boys: 0,
-        baby: 2,
-        phone: "3478955772",
-        address: "Via Cellini 26",
-        city: "Cesano Boscone"
-    ),
-  ];
+  factory AppSession(){
+    return _appSession;
+  }
 
 
-  List<ShoppingBucket> bucketList = [
-    ShoppingBucket(
-      owner: "Bogoni Laura",
-      state: DeliverState.packaging,
-      bucket: Product.createList(list)
-    ),
-    ShoppingBucket(
-      owner: "Maringelli Massimiliano",
-      state: DeliverState.packaging,
-      bucket: Product.createList(list)
-    ),
-    ShoppingBucket(
-      owner: "Vasta Maria",
-      state: DeliverState.packaging,
-      bucket: Product.createList(list)
-    ),
-    ShoppingBucket(
-      owner: "Putignano Davide",
-      state: DeliverState.packaging,
-      bucket: Product.createList(list)
-    )
-  ];
+  ShoppingBucket _haveBucket(String familyId){
+
+    for(ShoppingBucket bucket in _bucketList){
+      if(bucket.owner == familyId)
+        return bucket;
+    }
+
+    return null;
+  }
 
 
   static  final List<String> list = [
-  "OLIO pz 1",
-  "RISO pz 1",
-  "PASSATA pz 2",
-  "CECI pz 1",
+    "OLIO pz 1",
+    "RISO pz 1",
+    "PASSATA pz 2",
+    "CECI pz 1",
 
   ];
 
 
-  ShoppingBucket currfamilyBucket;
-
   ShoppingBucket getBucketByOwner(String owner) {
 
-    for(ShoppingBucket bucket in bucketList){
+    for(ShoppingBucket bucket in _bucketList){
       if(bucket.owner == owner){
         return bucket;
       }
@@ -97,41 +57,47 @@ class AppSession extends ChangeNotifier{
 
 
 
-  void saveByBucket(ShoppingBucket bucket) {
+  void notify() {
 
-   /** for(int i = 0; i <bucketList.length; i++){
-      if(bucket.owner == bucket.owner){
-         bucketList[i] = bucket;
-      }
-    }**/
     notifyListeners();
   }
 
-  getStateByOwner(String owner) {
-    return getBucketByOwner(owner).state;
+  getStateByOwner(String familyId) {
+    return familyBucket(familyId);
   }
 
-}
+  allFamily() async {
 
-/**
-    "LENTICCHIE pz 1",
-    "FAGIOLI pz 1",
-    "PISELLI pz 0",
-    "TONNO pz 5",
-    "CARNE IN SCATOLA pz 2",
-    "FORMAGGI pz 3",
-    "LATTE pz 4",
-    "ZUCCHERO pz 3",
-    "CAFFE pz 1",
-    "MARMELLATA/NUTELLA pz 2",
-    "BISCOTTI pz 3",
-    "PAN BAULETTO pz 2",
-    "FETTE BISCOTTATE pz 1",
-    "BRIOCHE pz 1",
-    "PASTA kg 8",
-    "BIBITE pz 3",
-    "OMOGENEIZZATI pz 1",
-    "CREME pz 1",
-    "NEONATI",
-    "ALTRO"
-**/
+    Map<String, dynamic> container =   await  _httpCaller.allFamily();
+
+    for(String key in container.keys ){
+      families.add(FamilyMap(
+        familyId: key,
+        family:  Family.createFamily(container[key]),
+      ));
+      //families.add(FamilyMap(fm    key,));
+    }
+
+    notifyListeners();
+  }
+
+
+  Future<ShoppingBucket> familyBucket(String  familyId) async {
+
+    ShoppingBucket tmp = _haveBucket(familyId);
+
+    if(tmp == null){
+
+      List<dynamic> list = await  _httpCaller.familyBucket(familyId) ;
+
+      _bucketList.add (ShoppingBucket(
+          owner: familyId,
+          state: PACKAGING,
+          bucket: Product.createListByDynamic(list)));
+
+      tmp = _bucketList[_bucketList.length - 1];
+    }
+
+    return tmp;
+  }
+}

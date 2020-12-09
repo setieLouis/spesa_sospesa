@@ -13,7 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'family.dart';
 
 class DeliverView extends StatefulWidget {
-  final Family family;
+  final FamilyMap family;
 
   const DeliverView({Key key, this.family}) : super(key: key);
 
@@ -22,24 +22,26 @@ class DeliverView extends StatefulWidget {
   _DeliverViewState createState() => _DeliverViewState();
 }
 
-const List<String> listaSpesa = [
-  "patate pz 2",
-  "passate_pomodoro pz 4",
-  "scatole_di_latte pz 3",
-  "Cereali pz 5",
-];
 
 
 class _DeliverViewState extends State<DeliverView> {
 
-
-
   ShoppingBucket bucket;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    bucket =  context.read<AppSession>().getBucketByOwner(widget.family.name);
+    setBucket();
+  }
+
+
+  setBucket() async{
+
+     ShoppingBucket tmp = await context.read<AppSession>().familyBucket(widget.family.familyId);
+      setState(() {
+        bucket = tmp;
+      });
   }
 
   final TextStyle itemStyle =
@@ -57,27 +59,26 @@ class _DeliverViewState extends State<DeliverView> {
 
   @override
   Widget build(BuildContext context) {
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
         children: <Widget>[
-          ChangeNotifierProvider(
-            create : (sessionContext) => AppSession(),
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-              child: SafeArea(
-                  child: Row(
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            child: SafeArea(
+                child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
 
                     children: familyCount()
-                  )),
-            ),
+                )),
           ),
-          Flexible(flex: 7, child: getBody(true))
+          Flexible(flex: 7, child: getBody())
         ],
       ),
     );
@@ -91,14 +92,15 @@ class _DeliverViewState extends State<DeliverView> {
       IconButton(
         padding: EdgeInsets.all(0),
           onPressed: () {
-           context.read<AppSession>().saveByBucket(bucket);
+           widget.family.family.state = bucket.state;
+           context.read<AppSession>().notify();
             Navigator.pop(context);
           },
           icon : FaIcon(FontAwesomeIcons.arrowLeft, size: 18, color: Colors.blueGrey[300])
       ),
 
       Text(
-        "${widget.family.name}",
+        "${widget.family.family.name}",
         style: TextStyle(
             fontSize: 20,
             fontFamily: "montserrat",
@@ -107,40 +109,44 @@ class _DeliverViewState extends State<DeliverView> {
       ),
     ];
 
-    for(int i = 0; i  < widget.family.adults; i++){
+    for(int i = 0; i  < widget.family.family.adults; i++){
       childreen.add( SizedBox(width: 10));
       childreen.add(FaIcon(FontAwesomeIcons.male, size: 25, color: Colors.blueGrey[300]));
     }
 
-    for(int i = 0; i  < widget.family.boys; i++){
+    for(int i = 0; i  < widget.family.family.boys; i++){
       childreen.add( SizedBox(width: 10));
       childreen.add(FaIcon(FontAwesomeIcons.male, size: 20, color: Colors.blueGrey[300]));
     }
 
-    for(int i = 0; i  < widget.family.baby; i++){
+    for(int i = 0; i  < widget.family.family.baby; i++){
       childreen.add( SizedBox(width: 10));
       childreen.add(FaIcon(FontAwesomeIcons.baby, size: 15, color: Colors.blueGrey[300]));
     }
     return childreen;
   }
-  getBody(bool done) {
-    if (bucket.state == DeliverState.delivering || bucket.state == DeliverState.delivered ) {
+  getBody() {
+
+    if(bucket == null)
+      return Container();
+
+    if (bucket.state == DELIVERING || bucket.state == DELIVERED ) {
       return Column(
         children: <Widget>[
           SizedBox(
             height: 40,
           ),
-          InfoRow(widget.family.address, FontAwesomeIcons.mapMarkerAlt,
+          InfoRow(widget.family.family.address, FontAwesomeIcons.mapMarkerAlt,
               onPress: () {
                 MapsLauncher.launchQuery(
-                    '${widget.family.address}, ${widget.family.city}');
+                    '${widget.family.family.address}, ${widget.family.family.city}');
               }),
-          InfoRow(widget.family.intercom, FontAwesomeIcons.intercom),
+          InfoRow(widget.family.family.intercom, FontAwesomeIcons.intercom),
           InfoRow(
-            widget.family.phone,
+            widget.family.family.phone,
             FontAwesomeIcons.phone,
             onPress: () {
-              launch('tel:// ${widget.family.phone}');
+              launch('tel:// ${widget.family.family.phone}');
             },
           ),
           Expanded(child: getDeliverBtn())
@@ -154,10 +160,10 @@ class _DeliverViewState extends State<DeliverView> {
         Expanded(
           flex: 1,
           child: InfoRow(
-            widget.family.phone,
+            widget.family.family.phone,
             FontAwesomeIcons.phone,
             onPress: () {
-              launch('tel:// ${widget.family.phone}');
+              launch('tel:// ${widget.family.family.phone}');
             },
           ),
         ),
@@ -194,7 +200,7 @@ class _DeliverViewState extends State<DeliverView> {
   }
 
   DoneBtn getDeliverBtn() {
-    return bucket.state == DeliverState.delivered
+    return bucket.state == DELIVERED
         ? DoneBtn(FontAwesomeIcons.check,
         borderColor: Colors.white,
         background: Colors.white,
@@ -204,7 +210,7 @@ class _DeliverViewState extends State<DeliverView> {
   }
 
   DoneBtn getPackageBtn() {
-    return bucket.state == DeliverState.packaged
+    return bucket.state == PACKAGED
         ? DoneBtn(FontAwesomeIcons.box,
         circleSize: 80,
         borderColor: Colors.white,
@@ -215,7 +221,6 @@ class _DeliverViewState extends State<DeliverView> {
   }
 }
 
-//first: Colors.white, second Colors.white, thir Colors.green,
 
 
 
@@ -348,37 +353,3 @@ class DoneBtn extends StatelessWidget {
     return size;
   }
 }
-
-/**
-
-    <Widget>[
-    Text(
-    "${widget.family.name}",
-    style: TextStyle(
-    fontSize: 20,
-    fontFamily: "montserrat",
-    fontWeight: FontWeight.w600,
-    color: Colors.blueGrey[600]),
-    ),
-    SizedBox(
-    width: 10,
-    ),
-    FaIcon(FontAwesomeIcons.male,
-    size: 25, color: Colors.blueGrey[300]),
-    SizedBox(
-    width: 10,
-    ),
-    FaIcon(FontAwesomeIcons.male,
-    size: 25, color: Colors.blueGrey[300]),
-    SizedBox(
-    width: 10,
-    ),
-    FaIcon(FontAwesomeIcons.male,
-    size: 20, color: Colors.blueGrey[300]),
-    SizedBox(
-    width: 10,
-    ),
-    FaIcon(FontAwesomeIcons.baby,
-    size: 15, color: Colors.blueGrey[300]),
-    ],
-**/
