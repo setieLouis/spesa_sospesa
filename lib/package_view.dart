@@ -4,9 +4,9 @@ import 'package:spesa_sospesa/product.dart';
 
 class PackageView extends StatelessWidget {
 
-  List<FlatButton> containers;
+  final List<FlatButton> containers = [];
   PackageView(List<Product> products , Function addToggle){
-    containers = [];
+
     for(int i = 0; i < products.length; i++){
       Product p = products[i];
       containers.add(
@@ -46,6 +46,5 @@ class PackageView extends StatelessWidget {
         ),
       );
   }
-
 
 }
