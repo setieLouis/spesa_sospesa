@@ -4,24 +4,28 @@ import 'package:spesa_sospesa/product.dart';
 
 class PackageView extends StatelessWidget {
 
-  final List<FlatButton> containers = [];
+  final List<Widget> containers = [];
   PackageView(List<Product> products , Function addToggle){
 
     for(int i = 0; i < products.length; i++){
       Product p = products[i];
       containers.add(
-          FlatButton(
-            onPressed: () => addToggle(i),
-            child: Container(
-              width: 150,
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: getColor(p.added),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Center(
-                child: Text(
-                  p.toString(),
-                  style: TextStyle(fontSize: 12, color: Colors.white),
+          Container(
+            margin: EdgeInsets.all(5),
+            child: FlatButton(
+              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              onPressed: () => addToggle(i),
+              child: Container(
+                width: 150,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: getColor(p.added),
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                  child: Text(
+                    p.toString(),
+                    style: TextStyle(fontSize: 12, color: Colors.white),
+                  ),
                 ),
               ),
             ),
