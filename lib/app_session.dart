@@ -13,6 +13,7 @@ class AppSession extends ChangeNotifier{
   final HttpCaller _httpCaller = HttpCaller();
   List<ShoppingBucket> _bucketList = [];
   List<FamilyMap> families = [];
+  List<FamilyMap> allfamilies = [];
   ShoppingBucket currentBucket;
 
   /// Factory constructor
@@ -68,15 +69,7 @@ class AppSession extends ChangeNotifier{
 
   allFamily() async {
 
-    Map<String, dynamic> container =   await  _httpCaller.allFamily();
-
-    for(String key in container.keys ){
-      families.add(FamilyMap(
-        familyId: key,
-        family:  Family.createFamily(container[key]),
-      ));
-      //families.add(FamilyMap(fm    key,));
-    }
+    families = await  _httpCaller.allFamily();
 
     notifyListeners();
   }
@@ -100,4 +93,9 @@ class AppSession extends ChangeNotifier{
 
     return tmp;
   }
+
+  void saveFamily(Map<String, dynamic> map, String id) {
+      _httpCaller.updateFamily(map, null);
+  }
+
 }

@@ -1,12 +1,18 @@
 import 'package:flutter/cupertino.dart';
-import 'package:spesa_sospesa/product.dart';
-import 'package:spesa_sospesa/shoping_bucket.dart';
 
 
-/// the following attribute define old interval
-/// adults = [18, +00)
-/// boys = [8 , 16]
-/// baby = [0 , 8]
+const String NAME = 'name';
+const String ADULTS = 'adults';
+const String BOYS = 'boys';
+const String BABY = 'baby';
+const String PHONE = 'phone';
+const String ADDRESS = 'address';
+const String CITY = 'city';
+const String STATE = 'state';
+const String INTERCOM = 'intercom';
+const String HELPER = 'helper';
+const String HELPER_NAME = 'helpername';
+
 
 class FamilyMap{
 
@@ -28,14 +34,9 @@ class Family{
   final String phone;
   final String address;
   final String city;
+  final String helper;
+  final String helperName;
 
-  /// can assume the following values
-  ///   packaging,
-  ///   packaged,
-  ///   delivering,
-  ///   delivered
-  ///   we dont use enum for time
-  ///
   String state;
 
   String _intercom;
@@ -48,7 +49,9 @@ class Family{
     @required this.phone,
     @required this.address,
     @required this.city,
-    @required   this.state,
+    @required  this.state,
+    @required  this.helper,
+    @required  this.helperName,
   });
 
 
@@ -58,14 +61,16 @@ class Family{
 
   static Family createFamily(Map<String, dynamic> map){
     return Family(
-      name: map["name"],
-      adults: map["adults"],
-      boys: map["boys"],
-      baby: map["baby"],
-      phone: map["phone"],
-      address: map["address"],
-      city: map["city"],
-      state : map["state"],
+      name: map[NAME],
+      adults: map[ADULTS],
+      boys: map[BOYS],
+      baby: map[BABY],
+      phone: map[PHONE],
+      address: map[ADDRESS],
+      city: map[CITY],
+      state : map[STATE],
+      helper : map[HELPER],
+      helperName : map[HELPER_NAME],
     );
   }
 }

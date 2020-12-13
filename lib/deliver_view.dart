@@ -10,6 +10,7 @@ import 'package:spesa_sospesa/product.dart';
 import 'package:spesa_sospesa/shoping_bucket.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'custom_btn.dart';
 import 'family.dart';
 
 class DeliverView extends StatefulWidget {
@@ -199,31 +200,30 @@ class _DeliverViewState extends State<DeliverView> {
     return allAdded;
   }
 
-  DoneBtn getDeliverBtn() {
+  CustomBtn getDeliverBtn() {
     return bucket.state == DELIVERED
-        ? DoneBtn(FontAwesomeIcons.check,
+        ? CustomBtn(
+        icon: FontAwesomeIcons.check,
         borderColor: Colors.white,
         background: Colors.white,
         iconColor: Colors.green)
-        : DoneBtn(FontAwesomeIcons.peopleCarry,
+        : CustomBtn(icon: FontAwesomeIcons.peopleCarry,
         onPress: () => setState(() => bucket.nextState()));
   }
 
-  DoneBtn getPackageBtn() {
+  CustomBtn getPackageBtn() {
     return bucket.state == PACKAGED
-        ? DoneBtn(FontAwesomeIcons.box,
-        circleSize: 80,
+        ? CustomBtn( icon: FontAwesomeIcons.box,
+        height: 80,
         borderColor: Colors.white,
         iconColor: Colors.green,
         onPress: () => setState(() => bucket.nextState()))
-        : DoneBtn(FontAwesomeIcons.boxOpen,
-        circleSize: 80);
+        : CustomBtn( icon: FontAwesomeIcons.boxOpen,
+        height: 80);
   }
 }
 
-
-
-
+// ignore: must_be_immutable
 class InfoRow extends StatelessWidget {
   final String value;
   final IconData icon;
@@ -268,88 +268,5 @@ class InfoRow extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class DoneBtn extends StatelessWidget {
-  double circleSize;
-  double internalCircleSize;
-
-  void Function() onPress;
-  final IconData icon;
-  Color borderColor;
-  Color background;
-  Color iconColor;
-//
-  DoneBtn(this.icon,
-      {this.borderColor,
-        this.background,
-        this.iconColor,
-        this.onPress,
-        this.circleSize = 160.0}) {
-    if (this.onPress == null) {
-      onPress = () {};
-    }
-
-    if (borderColor == null) {
-      borderColor = Colors.blueGrey[100];
-    }
-
-    if (background == null) {
-      background = Colors.white;
-    }
-
-    if (iconColor == null) {
-      iconColor = Colors.blueGrey[200];
-    }
-
-    internalCircleSize = getInterneCircle();
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        height: circleSize,
-        width: circleSize,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(circleSize / 2),
-            border: Border.all(width: 5, color: borderColor)),
-        child: Center(
-          child: Container(
-            height: internalCircleSize,
-            width: internalCircleSize,
-            decoration: BoxDecoration(
-                color: background,
-                borderRadius: BorderRadius.circular(internalCircleSize / 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey[400].withOpacity(0.3),
-                    blurRadius: 5.0,
-                    spreadRadius: 3,
-                    offset: Offset(0, 0),
-                  ),
-                ]),
-            child: FlatButton(
-              shape: CircleBorder(),
-              onPressed: () => onPress(),
-              child: Center(
-                child: FaIcon(icon, size: getInconSize(), color: iconColor),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  double getInterneCircle() {
-    double interne = ((85 * circleSize) / 100);
-    return interne;
-  }
-
-  double getInconSize() {
-    double size = ((30 * circleSize) / 100);
-    return size;
   }
 }
