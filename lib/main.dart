@@ -72,26 +72,22 @@ class AdminHelperView extends StatelessWidget {
                     iconColor: Colors.white,
                   )),
               Container(
-                  width: 150,
+                  width: 300,
                   child: CustomBtn(
-                    icon: FontAwesomeIcons.cogs,
-                    text: "Setting",
+                    icon: FontAwesomeIcons.fileExcel,
+                    text: "File excel",
                     radius: 10,
-                    height: 150,
+                    height: 140,
+                    width: 330,
                     borderColor: Colors.white,
                     background: Colors.blueGrey[400],
                     iconColor: Colors.white,
-                  )),
-              Container(
-                  width: 150,
-                  child: CustomBtn(
-                    icon: FontAwesomeIcons.calculator,
-                    text: "Bucket",
-                    radius: 10,
-                    height: 150,
-                    borderColor: Colors.white,
-                    background: Colors.blueGrey[400],
-                    iconColor: Colors.white,
+                    onPress: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SimpleHelperView()));
+                    },
                   )),
             ],
           ),
