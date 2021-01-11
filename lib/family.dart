@@ -27,15 +27,16 @@ class FamilyMap{
 class Family{
 
   /// FAMILY INFO
-  final String name;
-  final int adults;
-  final int boys;
-  final int baby;
+  String name;
+  int adults;
+  int boys;
+  int baby;
   final String phone;
   final String address;
   final String city;
   final String helper;
   final String helperName;
+  List<String> helpers;
 
   String state;
 
@@ -52,6 +53,7 @@ class Family{
     @required  this.state,
     @required  this.helper,
     @required  this.helperName,
+    this.helpers,
   });
 
 
