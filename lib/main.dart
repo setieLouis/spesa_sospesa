@@ -10,9 +10,11 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:spesa_sospesa/app_session.dart';
 import 'package:spesa_sospesa/family.dart';
+import 'package:spesa_sospesa/simple_helper_view.dart';
 
 import 'FamilyView.dart';
 import 'custom_btn.dart';
+import 'exceL_result_View.dart';
 
 void main() {
   runApp(
@@ -48,6 +50,12 @@ class AdminHelperView extends StatelessWidget {
                     borderColor: Colors.white,
                     background: Colors.blueGrey[400],
                     iconColor: Colors.white,
+                    onPress: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SimpleHelperView()));
+                    },
                   )),
               Container(
                   width: 150,
@@ -100,10 +108,10 @@ class AdminHelperView extends StatelessWidget {
 
                         spese =  parseExcel( Excel.decodeBytes(file, update: true));
                       }
-                      /**Navigator.push(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SimpleHelperView()));**/
+                              builder: (context) => ExcelResultView(spese)));
 
                       /**
                       var file = "Users/sadjambr/Downloads/file.xlsx";
@@ -166,7 +174,7 @@ class AdminHelperView extends StatelessWidget {
 
 
         List<String> h = getCols(row[0].toString());
-        family.helpers =  h == null ? oldper : h;
+        family.helpers =  h == null || h[0] == "null" ? oldper : h;
         family.adults = int.parse(member[0]);
         family.boys =
         member.length > 1 ? int.parse(member[1]) : 0;

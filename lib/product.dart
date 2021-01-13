@@ -18,6 +18,10 @@ class Product {
       return elements.map((e) => create(e as String)).toList();
   }
 
+  static List<Product> createListByString(List<String> elements ){
+      return elements.map((e) => create(e)).toList();
+  }
+
   static Product create(String element ){
       Product product = new Product();
       product._element = element;

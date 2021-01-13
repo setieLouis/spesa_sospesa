@@ -52,9 +52,7 @@ class _SimpleHelperViewState extends State<SimpleHelperView> {
               child: ListView.builder(
                   itemCount: appSession.families.length,
                   itemBuilder: (BuildContext context, int index){
-
                     FamilyMap current = appSession.families[index];
-
                     return   Container(
                       margin: EdgeInsets.symmetric(vertical: 5 , horizontal: 10 ),
                       decoration: BoxDecoration(

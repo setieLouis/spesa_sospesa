@@ -56,8 +56,6 @@ class _DeliverViewState extends State<DeliverView> {
   );
 
 
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -75,7 +73,6 @@ class _DeliverViewState extends State<DeliverView> {
             child: SafeArea(
                 child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
-
                     children: familyCount()
                 )),
           ),
@@ -137,15 +134,15 @@ class _DeliverViewState extends State<DeliverView> {
           SizedBox(
             height: 40,
           ),
-          InfoRow(widget.family.family.address, FontAwesomeIcons.mapMarkerAlt,
+          InfoRow(widget.family.family.address, icon : FontAwesomeIcons.mapMarkerAlt,
               onPress: () {
                 MapsLauncher.launchQuery(
                     '${widget.family.family.address}, ${widget.family.family.city}');
               }),
-          InfoRow(widget.family.family.intercom, FontAwesomeIcons.intercom),
+          InfoRow(widget.family.family.intercom, icon: FontAwesomeIcons.intercom),
           InfoRow(
             widget.family.family.phone,
-            FontAwesomeIcons.phone,
+           icon:  FontAwesomeIcons.phone,
             onPress: () {
               launch('tel:// ${widget.family.family.phone}');
             },
@@ -162,7 +159,7 @@ class _DeliverViewState extends State<DeliverView> {
           flex: 1,
           child: InfoRow(
             widget.family.family.phone,
-            FontAwesomeIcons.phone,
+            icon: FontAwesomeIcons.phone,
             onPress: () {
               launch('tel:// ${widget.family.family.phone}');
             },
@@ -229,7 +226,7 @@ class InfoRow extends StatelessWidget {
   final IconData icon;
   void Function() onPress;
 
-  InfoRow(this.value, this.icon, {this.onPress}) {
+  InfoRow(this.value, {this.icon, this.onPress}) {
     if (onPress == null) {
       onPress = () {};
     }
@@ -251,7 +248,7 @@ class InfoRow extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              FaIcon(this.icon, size: 20, color: Colors.blueGrey[600]),
+              getIcon(),
               SizedBox(
                 width: 10,
               ),
@@ -268,5 +265,11 @@ class InfoRow extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget getIcon(){
+    if(this.icon == null)
+      return Container();
+    return  FaIcon(this.icon, size: 20, color: Colors.blueGrey[600]);
   }
 }
