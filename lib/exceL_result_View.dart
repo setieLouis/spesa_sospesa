@@ -1,15 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:spesa_sospesa/main.dart';
+import 'package:spesa_sospesa/http_caller.dart';
 import 'package:spesa_sospesa/package_view.dart';
 import 'package:spesa_sospesa/product.dart';
 
 import 'custom_btn.dart';
 import 'family.dart';
 
+// ignore: must_be_immutable
 class ExcelResultView extends StatelessWidget {
+
   final List<Spesa> spese;
+  HttpCaller httpCaller = HttpCaller();
+
   ExcelResultView(this.spese);
 
   @override
@@ -37,6 +41,12 @@ class ExcelResultView extends StatelessWidget {
                       borderColor: Colors.white,
                       background: Colors.green[400],
                       iconColor: Colors.white,
+                      onPress: () async{
+                        for(Spesa s in spese){
+                          await save(s);
+                        }
+                        Navigator.pop(context);
+                      },
                     ),
                     SizedBox(width: 10,),
                     CustomBtn(
@@ -65,6 +75,16 @@ class ExcelResultView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+
+  save(Spesa spesa) async{
+    //httpCaller.deleteBig("family");
+    //httpCaller.deleteBig("family");
+    Map<String,dynamic> map = new Map();
+    String faId =  await  httpCaller.updateFamily( Family.toJson(spesa.family), null);
+    map[faId] = spesa.spesa;
+    await httpCaller.saveBucket(map);
   }
 }
 
@@ -153,5 +173,19 @@ class CheckView extends StatelessWidget {
           FaIcon(FontAwesomeIcons.baby, size: 15, color: Colors.blueGrey[300]));
     }
     return childreen;
+  }
+}
+
+
+class Spesa {
+  Family family;
+  List<String> spesa;
+
+  Spesa() {
+    spesa = [];
+  }
+
+  addOne(String one) {
+    spesa.add(one);
   }
 }

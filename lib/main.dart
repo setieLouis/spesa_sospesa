@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:math';
+
 
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
@@ -107,26 +107,13 @@ class AdminHelperView extends StatelessWidget {
                         File(result.files.single.path).readAsBytesSync();
 
                         spese =  parseExcel( Excel.decodeBytes(file, update: true));
-                      }
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ExcelResultView(spese)));
 
-                      /**
-                      var file = "Users/sadjambr/Downloads/file.xlsx";
-                      var bytes = File(file).readAsBytesSync();
-
-                      var excel = Excel.decodeBytes(bytes);
-                      for (var table in excel.tables.keys) {
-                        print(table);
-                        print(excel.tables[table].maxCols);
-                        print(excel.tables[table].maxRows);
-                        for (var row in excel.tables[table].rows) {
-                          print("$row");
-                        }
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ExcelResultView(spese)));
                       }
-                        ***/
+
                     },
                   )),
             ],
@@ -137,7 +124,7 @@ class AdminHelperView extends StatelessWidget {
   }
 
   List<String> getCols(String element) {
-    String tmp = element.toString();
+
     if (element.trim() == "0") {
       return null;
     }
@@ -212,15 +199,3 @@ class AdminHelperView extends StatelessWidget {
 
 }
 
-class Spesa {
-  Family family;
-  List<String> spesa;
-
-  Spesa() {
-    spesa = [];
-  }
-
-  addOne(String one) {
-    spesa.add(one);
-  }
-}

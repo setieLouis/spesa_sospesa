@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:spesa_sospesa/family.dart';
 
@@ -59,7 +58,7 @@ class HttpCaller {
   }
 
 
-  Future<String > httpGet(String url) async{
+  Future<String> httpGet(String url) async{
 
     print(url);
 
@@ -72,7 +71,7 @@ class HttpCaller {
   }
 
 
-  void updateFamily(Map<String, dynamic> body, String id) async {
+  Future<String> updateFamily(Map<String, dynamic> body, String id) async {
 
     String url = '$base/$spesaSospesa/$familyCollection';
 
@@ -86,10 +85,16 @@ class HttpCaller {
       url +='.json';
       print(url);
       final resp2 =  await http.post(url, body:  jsonEncode(body));
-      print(resp2.body);
+       return  json.decode(resp2.body)["name"] ;
     }
+    return null;
   }
 
+
+  saveBucket(Map<String, dynamic> body){
+    String url = "$base/$spesaSospesa/$bucketCollection.json";
+    http.patch(url, body: jsonEncode(body));
+  }
 
   void delete(String id) async {
 
@@ -100,5 +105,16 @@ class HttpCaller {
     await http.delete(url);
 
   }
+
+  void deleteBig(String id) async {
+
+    String url = '$base/$spesaSospesa/$id.json';
+
+    print(url);
+
+    await http.delete(url);
+
+  }
+
 
 }

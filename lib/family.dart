@@ -11,6 +11,7 @@ const String CITY = 'city';
 const String STATE = 'state';
 const String INTERCOM = 'intercom';
 const String HELPER = 'helper';
+const String HELPERS = 'helpers';
 const String HELPER_NAME = 'helpername';
 
 
@@ -71,8 +72,23 @@ class Family{
       address: map[ADDRESS],
       city: map[CITY],
       state : map[STATE],
-      helper : map[HELPER],
-      helperName : map[HELPER_NAME],
     );
+  }
+
+
+  static Map<String, dynamic> toJson(Family family){
+
+    Map<String, dynamic> map = Map();
+    map[NAME] = family.name;
+    map[ADULTS] = family.adults;
+    map[BOYS] = family.boys;
+    map[BABY] = family.baby;
+    map[PHONE] = family.phone;
+    map[ADDRESS] = family.address;
+    map[CITY] = family.city;
+    map[STATE] = family.state;
+    map[HELPERS] = family.helpers;
+
+    return map;
   }
 }
