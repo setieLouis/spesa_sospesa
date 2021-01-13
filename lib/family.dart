@@ -32,8 +32,8 @@ class Family{
   int adults;
   int boys;
   int baby;
-  final String phone;
-  final String address;
+  String phone;
+  String address;
   final String city;
   final String helper;
   final String helperName;

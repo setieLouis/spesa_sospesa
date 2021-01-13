@@ -157,11 +157,14 @@ class AdminHelperView extends StatelessWidget {
         Family family = Family();
         var row = excel.tables[table].rows[i];
 
-        var member = getCols(row[3].toString());
+
 
 
         List<String> h = getCols(row[0].toString());
         family.helpers =  h == null || h[0] == "null" ? oldper : h;
+        family.phone = row[3].toString();
+        family.address = row[4].toString();
+        var member = getCols(row[5].toString());
         family.adults = int.parse(member[0]);
         family.boys =
         member.length > 1 ? int.parse(member[1]) : 0;
