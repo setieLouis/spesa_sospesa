@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:spesa_sospesa/family.dart';
 
@@ -20,7 +21,6 @@ class HttpCaller {
     return _httpCaller;
   }
 
-
   Future<List<FamilyMap>> allFamily() async {
 
     Map<String, dynamic> map = json.decode(await httpGet("$base/$spesaSospesa/$familyCollection.json"));
@@ -29,7 +29,7 @@ class HttpCaller {
     for(String key in map.keys ){
       families.add(FamilyMap(
         familyId: key,
-        family:  Family.createFamily(map[key]),
+        family: Family.createFamily(map[key]),
       ));
 
     }
@@ -75,35 +75,48 @@ class HttpCaller {
 
     String url = '$base/$spesaSospesa/$familyCollection';
 
-    if(id != null){
-
-       url +='/$id.json';
-       print(url);
-       final resp1 =  await http.patch(url, body:  jsonEncode(body));
-       print(resp1.body);
-    }else{
-      url +='.json';
+    if(id != null) {
+      url += '/$id.json';
       print(url);
-      final resp2 =  await http.post(url, body:  jsonEncode(body));
-       return  json.decode(resp2.body)["name"] ;
+      final resp1 = await http.patch(url, body: jsonEncode(body));
+      print(resp1.body);
+    } else {
+      url += '.json';
+      print(url);
+      final resp2 = await http.post(url, body: jsonEncode(body));
+      return json.decode(resp2.body)["name"];
     }
     return null;
   }
 
+  Future<String> updateHelper(Map<String, dynamic> body, String id) async {
+    String url = '$base/$spesaSospesa/$familyCollection';
 
-  saveBucket(Map<String, dynamic> body){
+    if (id != null) {
+      url += '/$id.json';
+      print(url);
+      final resp1 = await http.patch(url, body: jsonEncode(body));
+      print(resp1.body);
+    } else {
+      url += '.json';
+      print(url);
+      final resp2 = await http.post(url, body: jsonEncode(body));
+      return json.decode(resp2.body)["name"];
+    }
+    return null;
+  }
+
+  saveBucket(Map<String, dynamic> body) {
     String url = "$base/$spesaSospesa/$bucketCollection.json";
     http.patch(url, body: jsonEncode(body));
   }
 
   void delete(String id) async {
-
     String url = '$base/$spesaSospesa/$familyCollection/$id.json';
 
     print(url);
 
     await http.delete(url);
-
   }
 
   void deleteBig(String id) async {
@@ -113,7 +126,6 @@ class HttpCaller {
     print(url);
 
     await http.delete(url);
-
   }
 
 
