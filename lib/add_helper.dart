@@ -5,26 +5,26 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'Helper.dart';
 import 'custom_btn.dart';
 
-class AddHelper extends StatefulWidget {
+class OptionView extends StatefulWidget {
 
-  final List<HelperMap>  helpers;
-  final Function(HelperMap) onPress;
+  final List<String>  options;
+  final Function(int) onPress;
 
-  AddHelper(this.helpers, this.onPress);
+  OptionView(this.options, this.onPress);
 
   @override
-  _AddHelperState createState() => _AddHelperState();
+  _OptionViewState createState() => _OptionViewState();
 }
 
-class _AddHelperState extends State<AddHelper> {
+class _OptionViewState extends State<OptionView> {
 
-  List<HelperMap> tmpHelper;
+  List<String> tmpHelper;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    tmpHelper = widget.helpers;
+    tmpHelper = widget.options;
   }
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,6 @@ class _AddHelperState extends State<AddHelper> {
                         child: Container(
                           child: TextFormField(
                             onChanged: (value){
-                              print("**************** $value****************");
                               onSearch(value);
                             },
                             cursorColor: Colors.blueGrey[200],
@@ -126,17 +125,17 @@ class _AddHelperState extends State<AddHelper> {
 
 
   void onSearch(String input){
-    List<HelperMap> local = [];
+    List<String> local = [];
     input = input.toLowerCase();
 
     if(input != null && input.trim().isNotEmpty){
-      for(HelperMap h in widget.helpers){
-        if(h.helper.name.toLowerCase().contains(input)){
+      for(String h in widget.options){
+        if(h.toLowerCase().contains(input)){
           local.add(h);
         }
       }
     }else{
-      local = widget.helpers;
+      local = widget.options;
     }
 
     setState(() {
@@ -147,12 +146,13 @@ class _AddHelperState extends State<AddHelper> {
 
   List<Widget> getItem(){
     List<Widget> container=[];
-    for(HelperMap h in tmpHelper){
+    for(int i = 0; i < tmpHelper.length; i++ ){
+      String h = tmpHelper[i];
       container.add(
         Container(
           margin: EdgeInsets.symmetric(vertical: 5),
           child: CustomBtn(
-            text: h.helper.name,
+            text: h,
             radius: 10,
             width: 350,
             height: 60,
@@ -160,7 +160,7 @@ class _AddHelperState extends State<AddHelper> {
             borderColor: Colors.white,
             background: Colors.blueGrey[400],
             iconColor: Colors.white,
-            onPress: () => widget.onPress(h),
+            onPress: () => widget.onPress(i),
           ),
         ),
       );

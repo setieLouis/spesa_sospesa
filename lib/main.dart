@@ -1,20 +1,19 @@
 import 'dart:io';
 
-
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:spesa_sospesa/app_session.dart';
 import 'package:spesa_sospesa/family.dart';
 import 'package:spesa_sospesa/simple_helper_view.dart';
 
-import 'FamilyView.dart';
 import 'custom_btn.dart';
 import 'exceL_result_View.dart';
+import 'helper_view.dart';
 
 void main() {
   runApp(
@@ -84,6 +83,13 @@ class AdminHelperView extends StatelessWidget {
                     borderColor: Colors.white,
                     background: Colors.blueGrey[400],
                     iconColor: Colors.white,
+                    onPress: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FamilyView()));
+                    },
+                    //FamilyView
                   )),
               Container(
                   width: 300,
