@@ -57,29 +57,13 @@ class AdminHelperView extends StatelessWidget {
                     },
                   )),
               Container(
-                  width: 150,
-                  child: CustomBtn(
-                    icon: FontAwesomeIcons.home,
-                    text: "Family",
-                    radius: 10,
-                    height: 150,
-                    borderColor: Colors.white,
-                    background: Colors.blueGrey[400],
-                    iconColor: Colors.white,
-                    onPress: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FamilyView()));
-                    },
-                  )),
-              Container(
-                  width: 150,
+                  width: 300,
                   child: CustomBtn(
                     icon: FontAwesomeIcons.users,
                     text: "Add helper",
                     radius: 10,
-                    height: 150,
+                    height: 140,
+                    width: 330,
                     borderColor: Colors.white,
                     background: Colors.blueGrey[400],
                     iconColor: Colors.white,

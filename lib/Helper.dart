@@ -19,11 +19,7 @@ class Helper{
   String phone;
   String role;
 
-  Helper({
-    @required this.name,
-    @required this.phone,
-    @required this.role}
-  );
+  Helper({@required this.name, @required this.phone, @required this.role});
 
   static Helper createHelper(Map<String, dynamic> map){
     return Helper(

@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:spesa_sospesa/AddFamilyView.dart';
-import 'package:spesa_sospesa/family.dart';
 import 'package:spesa_sospesa/http_caller.dart';
 
+import 'Helper.dart';
 import 'custom_btn.dart';
 
 class FamilyView extends StatefulWidget {
@@ -14,8 +14,8 @@ class FamilyView extends StatefulWidget {
 
 class _FamilyViewState extends State<FamilyView> {
   HttpCaller _httpCaller = HttpCaller();
-  List<FamilyMap> all;
-  List<FamilyMap> families;
+  List<HelperMap> all;
+  List<HelperMap> families;
 
   @override
   void initState() {
@@ -123,7 +123,7 @@ class _FamilyViewState extends State<FamilyView> {
   }
 
   void retrieveFamilies() async {
-    List<FamilyMap> tmp = await _httpCaller.allFamily();
+    List<HelperMap> tmp = await _httpCaller.allHelper();
     setState(() {
       all = tmp;
       families = tmp;
@@ -135,12 +135,12 @@ class _FamilyViewState extends State<FamilyView> {
       return [];
     }
     List<Widget> container = [];
-    for (FamilyMap f in families) {
+    for (HelperMap f in families) {
       container.add(
         Container(
           margin: EdgeInsets.symmetric(vertical: 5),
           child: CustomBtn(
-            text: f.family.name,
+            text: f.helper.name,
             radius: 10,
             width: 350,
             height: 60,
@@ -148,6 +148,8 @@ class _FamilyViewState extends State<FamilyView> {
             borderColor: Colors.white,
             background: Colors.blueGrey[400],
             iconColor: Colors.white,
+
+            /// TODO CONVERT THIS METHOD TO HELPER
             onPress: () => update(f),
           ),
         ),
@@ -156,13 +158,13 @@ class _FamilyViewState extends State<FamilyView> {
     return container;
   }
 
-  void update(FamilyMap f) {
+  void update(HelperMap h) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => AddFamilyView(
-                  familyMap: f,
-                  title: '${f.family.name}',
+                  helperMap: h,
+                  title: '${h.helper.name}',
                   afterSave: () {
                     retrieveFamilies();
                     Navigator.pop(context);
@@ -186,12 +188,14 @@ class _FamilyViewState extends State<FamilyView> {
   }
 
   void onSearch(String input) {
-    List<FamilyMap> local = [];
+    List<HelperMap> local = [];
     input = input.toLowerCase();
 
-    if (input != null && input.trim().isNotEmpty) {
-      for (FamilyMap f in all) {
-        if (f.family.name.toLowerCase().contains(input)) {
+    if (input != null && input
+        .trim()
+        .isNotEmpty) {
+      for (HelperMap f in all) {
+        if (f.helper.name.toLowerCase().contains(input)) {
           local.add(f);
         }
       }

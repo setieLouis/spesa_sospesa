@@ -90,7 +90,7 @@ class HttpCaller {
   }
 
   Future<String> updateHelper(Map<String, dynamic> body, String id) async {
-    String url = '$base/$spesaSospesa/$familyCollection';
+    String url = '$base/$spesaSospesa/$helperCollection';
 
     if (id != null) {
       url += '/$id.json';
@@ -119,14 +119,19 @@ class HttpCaller {
     await http.delete(url);
   }
 
-  void deleteBig(String id) async {
-
-    String url = '$base/$spesaSospesa/$id.json';
+  void deleteHelper(String id) async {
+    String url = '$base/$spesaSospesa/$helperCollection/$id.json';
 
     print(url);
 
     await http.delete(url);
   }
 
+  void deleteBig(String id) async {
+    String url = '$base/$spesaSospesa/$id.json';
 
+    print(url);
+
+    await http.delete(url);
+  }
 }

@@ -6,18 +6,17 @@ import 'package:spesa_sospesa/Helper.dart';
 import 'package:spesa_sospesa/add_helper.dart';
 import 'package:spesa_sospesa/family.dart';
 import 'package:spesa_sospesa/http_caller.dart';
-import 'package:spesa_sospesa/shoping_bucket.dart';
 
 import 'app_session.dart';
 import 'custom_btn.dart';
 
 class AddFamilyView extends StatefulWidget {
 
-  final FamilyMap familyMap;
+  final HelperMap helperMap;
   final Function afterSave;
   final String title;
 
-  AddFamilyView({this.familyMap, this.afterSave, @required this.title});
+  AddFamilyView({this.helperMap, this.afterSave, @required this.title});
 
   @override
   _AddFamilyViewState createState() => _AddFamilyViewState();
@@ -44,36 +43,32 @@ class _AddFamilyViewState extends State<AddFamilyView> {
   Map<String, dynamic> map = Map();
 
   TextEditingController nameController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
+
   TextEditingController phoneController = TextEditingController();
   TextEditingController intercomController = TextEditingController();
-  TextEditingController adultesController = TextEditingController();
+  TextEditingController roleController = TextEditingController();
   TextEditingController boysController = TextEditingController();
   TextEditingController babyController = TextEditingController();
   TextEditingController helperController = TextEditingController();
   String selected;
 
-
   HttpCaller _httpCaller = HttpCaller();
   List<HelperMap> helperMap;
-
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    if(widget.familyMap != null  && widget.familyMap.family != null){
+    if (widget.helperMap != null && widget.helperMap.helper != null) {
+      Helper helper = widget.helperMap.helper;
+      nameController.text = helper.name;
+      phoneController.text = helper.phone;
+      print("=================================== ${helper
+          .role}========================================");
+      roleController.text = helper.role;
 
-      Family  family = widget.familyMap.family;
-      nameController.text = family.name;
-      addressController.text = family.address;
-      phoneController.text = family.phone;
-      intercomController.text = family.intercom;
-      adultesController.text = family.adults.toString();
-      boysController.text = family.boys.toString();
-      helperController.text = family.helperName;
-      selected = widget.familyMap.familyId;
+      selected = widget.helperMap.key;
     }
   }
 
@@ -137,7 +132,8 @@ class _AddFamilyViewState extends State<AddFamilyView> {
                             controller: nameController,
                             label: 'Name *',
                             validator: (value) => stringValidator(value),
-                            onSave: (value) => map[NAME] = value),
+                            onSave: (value) => map[NAME] = value
+                        ),
                         SizedBox(
                           height: 25,
                         ),
@@ -150,59 +146,14 @@ class _AddFamilyViewState extends State<AddFamilyView> {
                           height: 25,
                         ),
                         CustomTextInput(
-                            controller: addressController,
-                            label: 'Address *',
-                            validator: (value) => stringValidator(value),
-                            onSave: (value) => map[ADDRESS] = value),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        CustomTextInput(
-                            controller: intercomController,
-                            label: 'Intercom',
-                            validator: (value) => null,
-                            onSave: (value) => map[INTERCOM] = value),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        CustomTextInput(
-                          controller: adultesController,
-                          label: 'Number of adultes',
-                          validator: (value) => numberValidator(value),
-                          onSave: (value) => onSave(value, ADULTS, 1),
-                        ),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        CustomTextInput(
-                          controller: boysController,
-                          label: 'Number of boys',
-                          validator: (value) => numberValidator(value),
-                          onSave: (value) => onSave(value, BOYS, 0),
-                        ),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        CustomTextInput(
-                          controller: babyController,
-                          label: 'Number of baby',
-                          validator: (value) => numberValidator(value),
-                          onSave: (value) => onSave(value, BABY, 0),
-                        ),
-                        SizedBox(
-                          height: 25,
-                        ),
-
-                        CustomTextInput(
-                          controller: helperController,
+                          controller: roleController,
                           readOnly: true,
-                          label: 'Add helper',
-                          onTap:  helper ,
-                            onSave: (value){
-                              map[HELPER] = this.selected;
-                              map[HELPER_NAME] = value;
-                            },
-                           validator: (value) => null,
+                          label: 'Role',
+                          onTap: helper,
+                          onSave: (value) {
+                            map["role"] = value;
+                          },
+                          validator: (value) => null,
                         ),
 
                       ],
@@ -221,20 +172,20 @@ class _AddFamilyViewState extends State<AddFamilyView> {
                   iconColor: Colors.white,
                   onPress: () async {
                     if (formakey.currentState.validate()) {
-                      map[CITY] = "CESANO BOSCONE";
-                      map[STATE] = PACKAGING;
                       formakey.currentState.save();
 
-                       await _httpCaller.updateFamily(
-                          map, widget.familyMap != null
-                          ? widget.familyMap.familyId
+                      await _httpCaller.updateHelper(
+                          map, widget.helperMap != null
+                          ? widget.helperMap.key
                           : null
                       );
+
+                      if (widget.afterSave != null) {
+                        widget.afterSave();
+                      }
                     }
 
-                    if(widget.afterSave != null){
-                      widget.afterSave();
-                    }
+
                   }),
             )
           ],
@@ -245,24 +196,29 @@ class _AddFamilyViewState extends State<AddFamilyView> {
 
 
   void helper() async{
-
-    if(helperMap == null){
-      helperMap =  await _httpCaller.allHelper();
+    if (helperMap == null) {
+      helperMap = await _httpCaller.allHelper();
     }
+
+    List<String> helperName = ["Admin", "helper"];
+    /**for(HelperMap helper in helperMap){
+        helperName.add(helper.helper.name);
+        }**/
+
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddHelper(
-          helperMap,
-              (HelperMap select) {
-            setState(() {
-              selected = select.key;
-              helperController.text =  select.helper.name;
-            });
-            Navigator.pop(context);
-          },
-        ),
+        builder: (context) =>
+            OptionView(
+              helperName,
+                  (int index) {
+                setState(() {
+                  roleController.text = helperName[index];
+                });
+                Navigator.pop(context);
+              },
+            ),
       ),
     );
   }
@@ -308,11 +264,10 @@ class _AddFamilyViewState extends State<AddFamilyView> {
   }
 
   Widget getDelete() {
-
-    if(widget.familyMap != null){
+    if (widget.helperMap != null) {
       return IconButton(
-          onPressed: ()  async{
-            await _httpCaller.delete(widget.familyMap.familyId);
+          onPressed: () async {
+            await _httpCaller.deleteHelper(widget.helperMap.key);
             widget.afterSave();
           },
           icon: FaIcon(Icons.delete,
