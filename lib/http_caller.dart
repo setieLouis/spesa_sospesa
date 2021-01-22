@@ -26,26 +26,44 @@ class HttpCaller {
     Map<String, dynamic> map = json.decode(await httpGet("$base/$spesaSospesa/$familyCollection.json"));
     List<FamilyMap> families = [];
 
-    for(String key in map.keys ){
+    for (String key in map.keys) {
       families.add(FamilyMap(
         familyId: key,
         family: Family.createFamily(map[key]),
       ));
-
     }
 
-     return families;
+    return families;
+  }
+
+  Future<List<FamilyMap>> familyByHelper(String helperId) async {
+    Map<String, dynamic> map = json
+        .decode(await httpGet("$base/$spesaSospesa/$familyCollection.json"));
+    List<FamilyMap> families = [];
+
+    for (String key in map.keys) {
+      List<dynamic> hk = map[key]["helpers"];
+      if (!hk.contains(helperId)) {
+        continue;
+      }
+      families.add(FamilyMap(
+        familyId: key,
+        family: Family.createFamily(map[key]),
+      ));
+    }
+
+    return families;
   }
 
   Future<List<HelperMap>> allHelper() async {
+    Map<String, dynamic> map = json
+        .decode(await httpGet("$base/$spesaSospesa/$helperCollection.json"));
 
-    Map<String, dynamic> map = json.decode(await httpGet("$base/$spesaSospesa/$helperCollection.json"));
-
-    List<HelperMap>   hm = [];
-    for(String key in map.keys ){
+    List<HelperMap> hm = [];
+    for (String key in map.keys) {
       hm.add(HelperMap(
         key: key,
-        helper:  Helper.createHelper(map[key]),
+        helper: Helper.createHelper(map[key]),
       ));
       //families.add(FamilyMap(fm    key,));
     }

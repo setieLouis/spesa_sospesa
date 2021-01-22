@@ -23,7 +23,7 @@ class _SimpleHelperViewState extends State<SimpleHelperView> {
   void initState() {
 
     super.initState();
-    context.read<AppSession>().allFamily();
+    context.read<AppSession>().familyByHelper("-MRRHBh9lHvboMF9H4ro");
   }
 
   @override

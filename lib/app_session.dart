@@ -59,7 +59,6 @@ class AppSession extends ChangeNotifier{
 
 
   void notify() {
-
     notifyListeners();
   }
 
@@ -68,19 +67,21 @@ class AppSession extends ChangeNotifier{
   }
 
   allFamily() async {
-
-    families = await  _httpCaller.allFamily();
+    families = await _httpCaller.allFamily();
 
     notifyListeners();
   }
 
+  familyByHelper(String helperId) async {
+    families = await _httpCaller.familyByHelper(helperId);
 
-  Future<ShoppingBucket> familyBucket(String  familyId) async {
+    notifyListeners();
+  }
 
+  Future<ShoppingBucket> familyBucket(String familyId) async {
     ShoppingBucket tmp = _haveBucket(familyId);
 
-    if(tmp == null){
-
+    if (tmp == null) {
       List<dynamic> list = await  _httpCaller.familyBucket(familyId) ;
 
       _bucketList.add (ShoppingBucket(
