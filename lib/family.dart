@@ -35,8 +35,7 @@ class Family{
   String phone;
   String address;
   final String city;
-  final String helper;
-  final String helperName;
+  final String helperCode;
   List<String> helpers;
 
   String state;
@@ -51,9 +50,8 @@ class Family{
     @required this.phone,
     @required this.address,
     @required this.city,
-    @required  this.state,
-    @required  this.helper,
-    @required  this.helperName,
+    @required this.state,
+    @required this.helperCode,
     this.helpers,
   });
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:spesa_sospesa/Helper.dart';
 import 'package:spesa_sospesa/http_caller.dart';
 import 'package:spesa_sospesa/package_view.dart';
 import 'package:spesa_sospesa/product.dart';
@@ -41,8 +42,24 @@ class ExcelResultView extends StatelessWidget {
                       borderColor: Colors.white,
                       background: Colors.green[400],
                       iconColor: Colors.white,
-                      onPress: () async{
-                        for(Spesa s in spese){
+                      onPress: () async {
+                        List<HelperMap> helperMap =
+                            await httpCaller.allHelper();
+
+                        for (Spesa s in spese) {
+                          List<String> hel = [];
+                          for (String h in s.family.helpers) {
+                            for (HelperMap m in helperMap) {
+                              if (m.helper.name.contains(h)) {
+                                hel.add(m.key);
+                                break;
+                              }
+                            }
+                          }
+
+                          s.family.helpers =
+                              (hel.isNotEmpty) ? hel : ["-MNzeoegQmbr3kpyU0na"];
+
                           await save(s);
                         }
                         Navigator.pop(context);
@@ -79,8 +96,6 @@ class ExcelResultView extends StatelessWidget {
 
 
   save(Spesa spesa) async{
-    //httpCaller.deleteBig("family");
-    //httpCaller.deleteBig("family");
     Map<String,dynamic> map = new Map();
     String faId =  await  httpCaller.updateFamily( Family.toJson(spesa.family), null);
     map[faId] = spesa.spesa;
