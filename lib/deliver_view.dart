@@ -197,26 +197,35 @@ class _DeliverViewState extends State<DeliverView> {
     return allAdded;
   }
 
-  CustomBtn getDeliverBtn() {
+  Widget getDeliverBtn() {
     return bucket.state == DELIVERED
-        ? CustomBtn(
-        icon: FontAwesomeIcons.check,
-        borderColor: Colors.white,
-        background: Colors.white,
-        iconColor: Colors.green)
-        : CustomBtn(icon: FontAwesomeIcons.peopleCarry,
-        onPress: () => setState(() => bucket.nextState()));
+        ? Center(
+            child: CustomBtn(
+                icon: FontAwesomeIcons.check,
+                borderColor: Colors.white,
+                background: Colors.white,
+                iconColor: Colors.green),
+          )
+        : Center(
+            child: CustomBtn(
+                icon: FontAwesomeIcons.peopleCarry,
+                onPress: () => setState(() => bucket.nextState())),
+          );
   }
 
-  CustomBtn getPackageBtn() {
+  Widget getPackageBtn() {
     return bucket.state == PACKAGED
-        ? CustomBtn( icon: FontAwesomeIcons.box,
-        height: 80,
-        borderColor: Colors.white,
-        iconColor: Colors.green,
-        onPress: () => setState(() => bucket.nextState()))
-        : CustomBtn( icon: FontAwesomeIcons.boxOpen,
-        height: 80);
+        ? Center(
+      child: CustomBtn(icon: FontAwesomeIcons.box,
+          height: 80,
+          borderColor: Colors.white,
+          iconColor: Colors.green,
+          onPress: () => setState(() => bucket.nextState())),
+    )
+        : Center(
+      child: CustomBtn(icon: FontAwesomeIcons.boxOpen,
+          height: 80),
+    );
   }
 }
 

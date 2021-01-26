@@ -37,13 +37,12 @@ class _SimpleHelperViewState extends State<SimpleHelperView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               // Navigator.canPop(context)
-
               Container(
                 child: IconButton(
                   icon: FaIcon(
-                    FontAwesomeIcons.times,
+                    Icons.close,
                     size: 30,
-                    color: Colors.blueGrey[200],
+                    color: Colors.blueGrey[300],
                   ),
                   onPressed: () => Navigator.pop(context),
                 ),
