@@ -12,6 +12,10 @@ import 'family.dart';
 
 const  HOLD_HEART = 'assets/images/hold_heart.svg';
 class SimpleHelperView extends StatefulWidget {
+  final String userId;
+  final bool turnBack;
+
+  SimpleHelperView(this.userId, this.turnBack);
 
   @override
   _SimpleHelperViewState createState() => _SimpleHelperViewState();
@@ -21,9 +25,8 @@ class _SimpleHelperViewState extends State<SimpleHelperView> {
 
   @override
   void initState() {
-
     super.initState();
-    context.read<AppSession>().familyByHelper("-MRRHBh9lHvboMF9H4ro");
+    context.read<AppSession>().familyByHelper(widget.userId);
   }
 
   @override
@@ -39,11 +42,7 @@ class _SimpleHelperViewState extends State<SimpleHelperView> {
               // Navigator.canPop(context)
               Container(
                 child: IconButton(
-                  icon: FaIcon(
-                    Icons.close,
-                    size: 30,
-                    color: Colors.blueGrey[300],
-                  ),
+                  icon: turnBack(),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
@@ -114,14 +113,26 @@ class _SimpleHelperViewState extends State<SimpleHelperView> {
     switch( state ){
 
       case  "packaged":
-        return  FaIcon(FontAwesomeIcons.box , size: 25,color: Colors.yellow[800],);
-      case  "delivering":
-        return  FaIcon(FontAwesomeIcons.peopleCarry , size: 25,color: Colors.lightBlue,);
-      case  "delivered":
-        return FaIcon(FontAwesomeIcons.check , size: 25,color: Colors.green,);
+        return FaIcon(
+          FontAwesomeIcons.box, size: 25, color: Colors.yellow[800],);
+      case "delivering":
+        return FaIcon(
+          FontAwesomeIcons.peopleCarry, size: 25, color: Colors.lightBlue,);
+      case "delivered":
+        return FaIcon(FontAwesomeIcons.check, size: 25, color: Colors.green,);
       default :
-        return  FaIcon(FontAwesomeIcons.boxOpen, size: 25,color: Colors.teal,);
+        return FaIcon(FontAwesomeIcons.boxOpen, size: 25, color: Colors.teal,);
     }
   }
 
+  Widget turnBack() {
+    if (widget.turnBack) {
+      return FaIcon(
+        Icons.close,
+        size: 30,
+        color: Colors.blueGrey[300],
+      );
+    }
+    return Container();
+  }
 }

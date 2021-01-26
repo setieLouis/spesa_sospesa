@@ -67,17 +67,27 @@ class HttpCaller {
       ));
       //families.add(FamilyMap(fm    key,));
     }
-     return hm;
+    return hm;
+  }
+
+  Future<Helper> helperById(String helperId) async {
+    Map<String, dynamic> map = json.decode(
+        await httpGet("$base/$spesaSospesa/$helperCollection/$helperId.json"));
+
+    if (map == null || map.isEmpty) {
+      return null;
+    }
+
+    Helper h = Helper.createHelper(map);
+    return h;
   }
 
   Future<List<dynamic>> familyBucket(String familyId) async {
-
-    return json.decode(await  httpGet("$base/$spesaSospesa/$bucketCollection/$familyId.json"));
+    return json.decode(
+        await httpGet("$base/$spesaSospesa/$bucketCollection/$familyId.json"));
   }
 
-
-  Future<String> httpGet(String url) async{
-
+  Future<String> httpGet(String url) async {
     print(url);
 
     final response =  await http.get(url);

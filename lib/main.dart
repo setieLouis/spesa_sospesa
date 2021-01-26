@@ -1,19 +1,13 @@
-import 'dart:io';
-
-import 'package:excel/excel.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:spesa_sospesa/app_session.dart';
-import 'package:spesa_sospesa/family.dart';
 import 'package:spesa_sospesa/simple_helper_view.dart';
 
-import 'custom_btn.dart';
-import 'exceL_result_View.dart';
-import 'helper_view.dart';
+import 'Helper.dart';
+import 'admin_helper_view.dart';
+import 'http_caller.dart';
 
 void main() {
   runApp(
@@ -21,174 +15,158 @@ void main() {
       create: (context) => AppSession(),
       child: MediaQuery(
         data: MediaQueryData(),
-        child: MaterialApp(
-          home: AdminHelperView(),
-        ),
+        child: MaterialApp(home: Login()),
       ),
     ),
   );
 }
 
-class AdminHelperView extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  String _inputValue;
+  Helper _helper;
+  final formakey = GlobalKey<FormState>();
+  HttpCaller _httpCaller = HttpCaller();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Wrap(
-            children: <Widget>[
-              Container(
-                  width: 300,
-                  child: CustomBtn(
-                    icon: FontAwesomeIcons.handHoldingHeart,
-                    text: "Helpe",
-                    radius: 10,
-                    height: 140,
-                    width: 330,
-                    borderColor: Colors.white,
-                    background: Colors.blueGrey[400],
-                    iconColor: Colors.white,
-                    onPress: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SimpleHelperView()));
-                    },
-                  )),
-              Container(
-                  width: 300,
-                  child: CustomBtn(
-                    icon: FontAwesomeIcons.users,
-                    text: "Add helper",
-                    radius: 10,
-                    height: 140,
-                    width: 330,
-                    borderColor: Colors.white,
-                    background: Colors.blueGrey[400],
-                    iconColor: Colors.white,
-                    onPress: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FamilyView()));
-                    },
-                    //FamilyView
-                  )),
-              Container(
-                  width: 300,
-                  child: CustomBtn(
-                    icon: FontAwesomeIcons.fileExcel,
-                    text: "File excel",
-                    radius: 10,
-                    height: 140,
-                    width: 330,
-                    borderColor: Colors.white,
-                    background: Colors.blueGrey[400],
-                    iconColor: Colors.white,
-                    onPress: () async {
-                      FilePickerResult result =
-                          await FilePicker.platform.pickFiles();
-                      List<Spesa> spese;
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Container(
+                // width: size.width,
+                // color: Colors.redAccent[400],
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    /**  SvgPicture.asset('assets/images/form.svg',
+                        height: 200, width: 200),
+                        Text(
+                        "Dool",
+                        style: TextStyle(
+                        fontFamily: "Kanit",
+                        fontSize: 35,
+                        //#34495E
+                        color: Colors.redAccent[400]
+                        //color: Color(0xFF34495E)
+                        ),
+                        )**/
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Container(
+                padding: EdgeInsets.all(30),
+                // height: (size.height / 3) * 2,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[400].withOpacity(0.3),
+                            blurRadius: 5.0,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color: Colors.grey[100]),
+                            ),
+                          ),
+                          child: Form(
+                              key: formakey,
+                              child: TextFormField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    _inputValue = value;
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value.isEmpty || _helper == null) {
+                                    return "this $value is wrong";
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) => print(value),
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "Code",
+                                  hintStyle: TextStyle(color: Colors.grey[400]),
+                                ),
+                              ))),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      height: 60,
+                      padding: EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.blueGrey[400].withOpacity(1),
+                      ),
+                      child: FlatButton(
+                        onPressed: () async {
+                          await checkUser();
 
-
-                      if (result != null) {
-                        List<int> file =
-                        File(result.files.single.path).readAsBytesSync();
-
-                        spese =  parseExcel( Excel.decodeBytes(file, update: true));
-
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ExcelResultView(spese)));
-                      }
-
-                    },
-                  )),
-            ],
-          ),
+                          if (formakey.currentState.validate()) {
+                            redirect();
+                          }
+                        },
+                        child: Center(
+                          child: Text(
+                            "Sign in",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
-  List<String> getCols(String element) {
-
-    if (element.trim() == "0") {
-      return null;
+  Future<void> checkUser() async {
+    if (_inputValue == null || _inputValue.isEmpty) {
+      return;
     }
-
-    return element.split("|");
+    _helper = await _httpCaller.helperById(_inputValue);
   }
 
-  bool isNumeric(String s) {
-    if (s == null) {
-      return false;
-    }
-    return double.tryParse(s) != null;
+  void redirect() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) {
+          return (_helper.role == "Admin")
+              ? AdminHelperView(_inputValue)
+              : SimpleHelperView(_inputValue, false);
+        }));
   }
-
-
-  List<Spesa> parseExcel(var excel){
-
-    List<Spesa> spese = [];
-    List<String> oldper = [];
-
-    for (var table in excel.tables.keys) {
-      print(table);
-      print(excel.tables[table].maxRows);
-      int maxRow = excel.tables[table].maxRows;
-
-      print(excel.tables[table].rows[0]);
-      var head = excel.tables[table].rows[0];
-
-      for (int i = 1; i < maxRow; i++) {
-        Family family = Family();
-        var row = excel.tables[table].rows[i];
-
-
-
-
-        List<String> h = getCols(row[0].toString());
-        family.helpers =  h == null || h[0] == "null" ? oldper : h;
-        family.phone = row[3].toString();
-        family.address = row[4].toString();
-        var member = getCols(row[5].toString());
-        family.adults = int.parse(member[0]);
-        family.boys =
-        member.length > 1 ? int.parse(member[1]) : 0;
-        family.baby =
-        member.length > 2 ? int.parse(member[2]) : 0;
-        //family.info =  member.length > 2 ? int.parse(member[2]): 0;
-        family.name = row[2].toString();
-
-        /// we use this variable when new row don't have field helpers
-        oldper = family.helpers;
-
-
-        Spesa spesa = Spesa();
-        spesa.family = family;
-
-        int maxCol = excel.tables[table].maxCols;
-        for (int j = 4; j < maxCol; j++) {
-          List<String> cols = getCols(row[j].toString());
-          if (cols == null) {
-            continue;
-          }
-
-          for (String el in cols) {
-            spesa.addOne(isNumeric(el)
-                ? " ${head[j]} $el"
-                : "${el.trim()}");
-          }
-        }
-
-        spese.add(spesa);
-      }
-    }
-    return spese;
-  }
-
 }
+
 
