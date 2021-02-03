@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spesa_sospesa/app_session.dart';
 import 'package:spesa_sospesa/simple_helper_view.dart';
 
@@ -15,22 +16,28 @@ void main() {
       create: (context) => AppSession(),
       child: MediaQuery(
         data: MediaQueryData(),
-        child: MaterialApp(home: Login()),
+        child: MaterialApp(home: InitPage()),
       ),
     ),
   );
 }
 
-class Login extends StatefulWidget {
+class InitPage extends StatelessWidget {
   @override
-  _LoginState createState() => _LoginState();
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+    );
+  }
 }
 
-class _LoginState extends State<Login> {
+// ignore: must_be_immutable
+class Login extends StatelessWidget {
   String _inputValue;
   Helper _helper;
   final formakey = GlobalKey<FormState>();
   HttpCaller _httpCaller = HttpCaller();
+  SharedPreferences preference;
 
   @override
   Widget build(BuildContext context) {
@@ -40,36 +47,11 @@ class _LoginState extends State<Login> {
         child: Column(
           children: <Widget>[
             Expanded(
-              flex: 3,
-              child: Container(
-                // width: size.width,
-                // color: Colors.redAccent[400],
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    /**  SvgPicture.asset('assets/images/form.svg',
-                        height: 200, width: 200),
-                        Text(
-                        "Dool",
-                        style: TextStyle(
-                        fontFamily: "Kanit",
-                        fontSize: 35,
-                        //#34495E
-                        color: Colors.redAccent[400]
-                        //color: Color(0xFF34495E)
-                        ),
-                        )**/
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 4,
               child: Container(
                 padding: EdgeInsets.all(30),
                 // height: (size.height / 3) * 2,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.only(top: 10),
@@ -95,9 +77,8 @@ class _LoginState extends State<Login> {
                               key: formakey,
                               child: TextFormField(
                                 onChanged: (value) {
-                                  setState(() {
-                                    _inputValue = value;
-                                  });
+                                  print(value);
+                                  _inputValue = value;
                                 },
                                 validator: (value) {
                                   if (value.isEmpty || _helper == null) {
@@ -128,7 +109,7 @@ class _LoginState extends State<Login> {
                           await checkUser();
 
                           if (formakey.currentState.validate()) {
-                            redirect();
+                            redirect(context);
                           }
                         },
                         child: Center(
@@ -152,21 +133,45 @@ class _LoginState extends State<Login> {
     );
   }
 
+  Future<bool> checkInstance() async {
+    preference = await SharedPreferences.getInstance();
+    return await preference.containsKey(_inputValue);
+  }
+
+  Future<bool> getHelper() async {
+    return await preference.get(_inputValue);
+  }
+
+
   Future<void> checkUser() async {
     if (_inputValue == null || _inputValue.isEmpty) {
       return;
     }
-    _helper = await _httpCaller.helperById(_inputValue);
+    if (!await checkInstance()) {
+      _helper = await _httpCaller.helperById(_inputValue);
+
+      if (_helper != null) {
+        save(_inputValue, _helper.role);
+      }
+    } else {
+      _helper = Helper();
+    }
   }
 
-  void redirect() {
+  void redirect(BuildContext context) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) {
-          return (_helper.role == "Admin")
+          return (preference.get(_inputValue) == "Admin")
               ? AdminHelperView(_inputValue)
               : SimpleHelperView(_inputValue, false);
         }));
   }
+
+  void save(String userId, String role) {
+    preference.setString("userId", userId);
+    preference.setString(userId, role);
+  }
 }
+
 
 
