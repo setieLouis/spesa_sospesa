@@ -22,14 +22,64 @@ void main() {
   );
 }
 
-class InitPage extends StatelessWidget {
+class InitPage extends StatefulWidget {
+  @override
+  _InitPageState createState() => _InitPageState();
+}
+
+class _InitPageState extends State<InitPage> {
+  String firstTime = "loading";
+  String role;
+  String userId;
+  SharedPreferences preference;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    checkFirstTime();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-    );
+    return getPage();
+  }
+
+  void checkFirstTime() async {
+    preference = await SharedPreferences.getInstance();
+    String page = "login";
+    if (preference.containsKey("userId")) {
+      userId = preference.get("userId");
+      role = preference.get(userId);
+      page = "home";
+    }
+    setState(() {
+      firstTime = page;
+    });
+  }
+
+  Widget getPage() {
+    if (firstTime == "loading") {
+      return Container(
+        child: Center(
+          child: Text("..."),
+        ),
+      );
+    } else if (firstTime == "login") {
+      return Login(preference);
+    }
+
+    return goHome();
+  }
+
+  Widget goHome() {
+    return (role == "Admin")
+        ? AdminHelperView(userId)
+        : SimpleHelperView(userId, false);
   }
 }
+
 
 // ignore: must_be_immutable
 class Login extends StatelessWidget {
@@ -38,6 +88,8 @@ class Login extends StatelessWidget {
   final formakey = GlobalKey<FormState>();
   HttpCaller _httpCaller = HttpCaller();
   SharedPreferences preference;
+
+  Login(this.preference);
 
   @override
   Widget build(BuildContext context) {
@@ -133,10 +185,6 @@ class Login extends StatelessWidget {
     );
   }
 
-  Future<bool> checkInstance() async {
-    preference = await SharedPreferences.getInstance();
-    return await preference.containsKey(_inputValue);
-  }
 
   Future<bool> getHelper() async {
     return await preference.get(_inputValue);
@@ -147,14 +195,11 @@ class Login extends StatelessWidget {
     if (_inputValue == null || _inputValue.isEmpty) {
       return;
     }
-    if (!await checkInstance()) {
-      _helper = await _httpCaller.helperById(_inputValue);
 
-      if (_helper != null) {
-        save(_inputValue, _helper.role);
-      }
-    } else {
-      _helper = Helper();
+    _helper = await _httpCaller.helperById(_inputValue);
+
+    if (_helper != null) {
+      save(_inputValue, _helper.role);
     }
   }
 
