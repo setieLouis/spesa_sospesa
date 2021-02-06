@@ -4,9 +4,16 @@
     <item android:drawable="@android:color/white" />
 
     <!-- You can insert your own image assets here -->
-    <!-- <item>
+    <item android:bottom="100dp">
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/launch_image" />
-    </item> -->
+            android:src=" @drawable/hold_heart120" />
+    </item>
+    <item android:bottom="30dp">
+        <bitmap
+            android:gravity="bottom"
+            android:src=" @drawable/qg" />
+    </item>
+
+
 </layer-list>

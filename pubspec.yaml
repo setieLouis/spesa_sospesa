@@ -33,6 +33,8 @@ dependencies:
   excel: ^1.0.3
   file_picker: ^2.1.4
   shared_preferences: ^0.5.12+4
+  loading_animations: ^2.1.0
+  splashscreen: ^1.3.5
 
 dev_dependencies:
   flutter_test:
@@ -51,7 +53,8 @@ flutter:
 
 
   assets:
-   - assets/images/
+    - assets/images/hold_heart.svg
+    - assets/images/splash_screen.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

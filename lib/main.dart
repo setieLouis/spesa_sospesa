@@ -16,7 +16,7 @@ void main() {
       create: (context) => AppSession(),
       child: MediaQuery(
         data: MediaQueryData(),
-        child: MaterialApp(home: InitPage()),
+        child: MaterialApp(home: InitPage()), //InitPage()),
       ),
     ),
   );
@@ -62,9 +62,14 @@ class _InitPageState extends State<InitPage> {
   Widget getPage() {
     if (firstTime == "loading") {
       return Container(
-        child: Center(
-          child: Text("..."),
-        ),
+        color: Colors
+            .white, /***LoadingRotating .square(
+            borderColor: Colors.blueGrey,
+            borderSize: 3.0,
+            size: 50.0,
+            backgroundColor: Colors.white,
+            duration: Duration(microseconds: 500),
+            )**/
       );
     } else if (firstTime == "login") {
       return Login(preference);
@@ -79,7 +84,6 @@ class _InitPageState extends State<InitPage> {
         : SimpleHelperView(userId, false);
   }
 }
-
 
 // ignore: must_be_immutable
 class Login extends StatelessWidget {
@@ -185,11 +189,9 @@ class Login extends StatelessWidget {
     );
   }
 
-
   Future<bool> getHelper() async {
     return await preference.get(_inputValue);
   }
-
 
   Future<void> checkUser() async {
     if (_inputValue == null || _inputValue.isEmpty) {
@@ -204,12 +206,11 @@ class Login extends StatelessWidget {
   }
 
   void redirect(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) {
-          return (preference.get(_inputValue) == "Admin")
-              ? AdminHelperView(_inputValue)
-              : SimpleHelperView(_inputValue, false);
-        }));
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return (preference.get(_inputValue) == "Admin")
+          ? AdminHelperView(_inputValue)
+          : SimpleHelperView(_inputValue, false);
+    }));
   }
 
   void save(String userId, String role) {
@@ -217,6 +218,3 @@ class Login extends StatelessWidget {
     preference.setString(userId, role);
   }
 }
-
-
-
