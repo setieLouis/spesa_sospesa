@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:spesa_sospesa/AddFamilyView.dart';
 import 'package:spesa_sospesa/http_caller.dart';
 
@@ -132,7 +133,19 @@ class _FamilyViewState extends State<FamilyView> {
 
   List<Widget> getFamiles() {
     if (families == null) {
-      return [];
+      return [
+        Container(
+          child: Center(
+            child: LoadingBouncingGrid.circle(
+              borderColor: Colors.blueGrey,
+              borderSize: 3.0,
+              size: 50.0,
+              backgroundColor: Colors.blueGrey,
+              duration: Duration(milliseconds: 1000),
+            ),
+          ),
+        )
+      ];
     }
     List<Widget> container = [];
     for (HelperMap f in families) {

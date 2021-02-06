@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 
 import 'app_session.dart';
@@ -32,7 +33,9 @@ class _SimpleHelperViewState extends State<SimpleHelperView> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppSession>(builder: (context, appSession, child){
-
+      print(
+        appSession.families.length,
+      );
       return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -59,46 +62,7 @@ class _SimpleHelperViewState extends State<SimpleHelperView> {
 
               Expanded(
                 flex: 6,
-                child: ListView.builder(
-                    itemCount: appSession.families.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      FamilyMap current = appSession.families[index];
-                      return Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[400].withOpacity(0.5),
-                              blurRadius: 2.0,
-                              spreadRadius: 1.0,
-                            ),
-                          ],
-                        ),
-                        child: FlatButton(
-                          onPressed: () {
-                            /// move deliver view
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return DeliverView(family: current);
-                            }));
-                          },
-                          child: ListTile(
-                            title: Text(
-                              current.family.name,
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: "montserrat",
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.blueGrey[800]),
-                            ),
-                            trailing: getStateIcon(current.family.state),
-                          ),
-                        ),
-                      );
-                    }),
+                child: getView(appSession),
               )
             ],
           ),
@@ -134,5 +98,63 @@ class _SimpleHelperViewState extends State<SimpleHelperView> {
       );
     }
     return Container();
+  }
+
+  Widget getView(AppSession appSession) {
+    if (appSession.families.length == 0)
+      return Container(
+        child: Center(
+          child: LoadingBouncingGrid.circle(
+            borderColor: Colors.blueGrey,
+            borderSize: 3.0,
+            size: 50.0,
+            backgroundColor: Colors.blueGrey,
+            duration: Duration(milliseconds: 1000),
+          ),
+        ),
+      );
+
+    return ListView.builder(
+        itemCount: appSession.families.length,
+        itemBuilder: (BuildContext context, int index) {
+          FamilyMap current = appSession.families[index];
+
+
+          return Container(
+            margin:
+            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey[400].withOpacity(0.5),
+                  blurRadius: 2.0,
+                  spreadRadius: 1.0,
+                ),
+              ],
+            ),
+            child: FlatButton(
+              onPressed: () {
+                /// move deliver view
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                      return DeliverView(family: current);
+                    }));
+              },
+              child: ListTile(
+                title: Text(
+                  current.family.name,
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: "montserrat",
+                      fontWeight: FontWeight.w300,
+                      color: Colors.blueGrey[800]),
+                ),
+                trailing: getStateIcon(current.family.state),
+              ),
+            ),
+          );
+        });
   }
 }

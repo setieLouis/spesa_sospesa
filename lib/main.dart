@@ -62,14 +62,7 @@ class _InitPageState extends State<InitPage> {
   Widget getPage() {
     if (firstTime == "loading") {
       return Container(
-        color: Colors
-            .white, /***LoadingRotating .square(
-            borderColor: Colors.blueGrey,
-            borderSize: 3.0,
-            size: 50.0,
-            backgroundColor: Colors.white,
-            duration: Duration(microseconds: 500),
-            )**/
+        color: Colors.white, /*****/
       );
     } else if (firstTime == "login") {
       return Login(preference);
